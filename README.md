@@ -1,93 +1,141 @@
 # video-fuzzing
 
-
-
-## Getting started
-
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
-
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
-
-## Add your files
-
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/topics/git/add_files/#add-files-to-a-git-repository) or push an existing Git repository with the following command:
-
-```
-cd existing_repo
-git remote add origin https://gitlab.com/securityinnovation/services/si/video-fuzzing.git
-git branch -M main
-git push -uf origin main
-```
-
-## Integrate with your tools
-
-- [ ] [Set up project integrations](https://gitlab.com/securityinnovation/services/si/video-fuzzing/-/settings/integrations)
-
-## Collaborate with your team
-
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Set auto-merge](https://docs.gitlab.com/user/project/merge_requests/auto_merge/)
-
-## Test and Deploy
-
-Use the built-in continuous integration in GitLab.
-
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
-
-***
-
-# Editing this README
-
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thanks to [makeareadme.com](https://www.makeareadme.com/) for this template.
-
-## Suggestions for a good README
-
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
-
-## Name
-Choose a self-explaining name for your project.
-
 ## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+Tools for creating media files to stress AV processing software.
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
-
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+MP4 is the primary format here, although `ffmpeg` is used for the actual AV work and it supports a lot of formats. Feel
+free to add more formats.
 
 ## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+
+You'll need [ffmpeg](https://ffmpeg.org). It's the most popular open-source, command line AV tool.
+
+```shell
+brew install ffmpeg || apt-get install ffmpeg || yum install ffmpeg
+```
 
 ## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+### video-high-scene-rate.py
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+When processes detect scene changes, aka chapters, we want to make a video with a LOT of them. The trade-off is to
+keep the video a reasonable size. This script makes "scenes" using solid colors, random noise or from a list of images.
 
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
+```commandline
+usage: video-high-scene-rate.py [-h] [--output OUTPUT] [--width WIDTH] [--height HEIGHT] [--frame_rate FRAME_RATE] [--total_frames TOTAL_FRAMES]
+                                [--frames_per_scene FRAMES_PER_SCENE] [--random-noise] [--mixed-scenes] [--codec {h264,h265}] [--scene-label SCENE_LABEL]
+                                [--image-list IMAGE_LIST] [--shuffle-images] [--add-audio]
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
+Generate video with excessive scene changes.
 
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
+options:
+  -h, --help            show this help message and exit
+  --output OUTPUT       Output video file
+  --width WIDTH         Video width
+  --height HEIGHT       Video height
+  --frame_rate FRAME_RATE
+                        Frames per second
+  --total_frames TOTAL_FRAMES
+                        Total number of frames in output
+  --frames_per_scene FRAMES_PER_SCENE
+                        Number of frames per scene
+  --random-noise        Use only random noise for scenes
+  --mixed-scenes        Randomly mix noise, color, and images
+  --codec {h264,h265}   Video codec to use
+  --scene-label SCENE_LABEL
+                        Path to text file with scene labels (0–255 chars per line)
+  --image-list IMAGE_LIST
+                        Path to text file with image filenames (one per line)
+  --shuffle-images      Shuffle the image list before use
+  --add-audio           Add mono 4kHz white noise audio track
+```
 
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
+### text-to-video.py
 
-## License
-For open source projects, say how it is licensed.
+Especially for LLMs, we want video with readable text in the video, audio and subtitles. We may want that text
+to be mismatched.
 
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+```commandline
+usage: text-to-video.py [-h] [--fontsize FONTSIZE] [--duration DURATION] [--output OUTPUT] [--fontcolor FONTCOLOR] [--background BACKGROUND] [--maxwidth MAXWIDTH]
+                        [--volume VOLUME] [--margin MARGIN] [--tts] [--tts-text TTS_TEXT] [--subtitle-language SUBTITLE_LANGUAGE]
+                        ...
+
+Generate a video with text, optional text-to-speech (TTS), and embedded subtitles.
+
+positional arguments:
+  text                  Text to display and/or speak
+
+options:
+  -h, --help            show this help message and exit
+  --fontsize FONTSIZE   Font size in pixels (default: 32)
+  --duration DURATION   Duration of the video in seconds (default: 10)
+  --output OUTPUT       Output filename (default: output.mp4)
+  --fontcolor FONTCOLOR
+                        Font color (default: white)
+  --background BACKGROUND
+                        Background color (default: black)
+  --maxwidth MAXWIDTH   Maximum video width in pixels (default: 1280)
+  --volume VOLUME       White noise volume in dB (default: -30)
+  --margin MARGIN       Margin around the text in pixels (default: 10)
+  --tts                 Use TTS audio instead of white noise
+  --tts-text TTS_TEXT   Alternate text to use for TTS (default: same as visible text)
+  --subtitle-language SUBTITLE_LANGUAGE
+                        Subtitle language code (default: eng)
+```
+
+### mp4_datetime_fuzzer.py
+
+Videos have timestamps in the frames. Let's fuzz those to see if something breaks :)
+
+```commandline
+usage: mp4_datetime_fuzzer.py [-h] --input INPUT [--output OUTPUT] [--count COUNT] [--atoms ATOMS [ATOMS ...]] [--bit-depth {32,64}] [--fields {creation,modification,both}]
+                              [--fuzz-fields FUZZ_FIELDS] [--log LOG] [--min-value MIN_VALUE] [--max-value MAX_VALUE] [--signed] [--value-mode {random,boundary,mixed}]
+                              [--seed SEED] [--dry-run] [--hash]
+
+MP4 datetime fuzzer (large-file safe, flexible)
+
+options:
+  -h, --help            show this help message and exit
+  --input, -i INPUT     Input MP4 file
+  --output, -o OUTPUT   Directory for fuzzed files
+  --count, -n COUNT     Number of output files to generate
+  --atoms ATOMS [ATOMS ...]
+                        Atom types to fuzz
+  --bit-depth {32,64}   Field size: 32 or 64-bit
+  --fields {creation,modification,both}
+                        Fields to fuzz
+  --fuzz-fields FUZZ_FIELDS
+                        Number of timestamp fields to fuzz per file
+  --log LOG             CSV file to log fuzzed changes
+  --min-value MIN_VALUE
+                        Minimum value to use for fuzzing
+  --max-value MAX_VALUE
+                        Maximum value for fuzzing
+  --signed              Use signed integer ranges
+  --value-mode {random,boundary,mixed}
+                        Value generation strategy
+  --seed SEED           Random seed for reproducibility
+  --dry-run             Do not write files, simulate only
+  --hash                Append SHA256 hash and log it
+```
+
+### scatter_bytes.py
+
+This script writes random bytes throughout a file. It isn't specifically for videos. (You could try it on your hard drive to see how resilient the filesystem is.)
+
+```commandline
+usage: scatter_bytes.py [-h] [--byte-set BYTE_SET [BYTE_SET ...]] [--length LENGTH] [--count COUNT] [--spacing SPACING] file
+
+Scatter random bytes into a binary file using random access.
+
+positional arguments:
+  file                  Path to the binary file to modify
+
+options:
+  -h, --help            show this help message and exit
+  --byte-set BYTE_SET [BYTE_SET ...]
+                        Set of hex byte values to use (e.g., 00 ff aa)
+  --length LENGTH       Length of each modification in bytes
+  --count COUNT         Number of random modifications to perform
+  --spacing SPACING     Minimum number of bytes between modifications (optional)
+```
