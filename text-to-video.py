@@ -67,6 +67,7 @@ def main():
     parser.add_argument("--margin", type=int, default=10, help="Margin around the text in pixels (default: 10)")
     parser.add_argument("--tts", action="store_true", help="Use TTS audio instead of white noise")
     parser.add_argument("--tts-text", help="Alternate text to use for TTS (default: same as visible text)")
+    parser.add_argument("--subtitle-text", help="Alternate text to use for subtitles (default: same as TTS text, which defaults to visible text)")
     parser.add_argument("--subtitle-language", default="eng", help="Subtitle language code (default: eng)")
     parser.add_argument("text", nargs=argparse.REMAINDER, help="Text to display and/or speak")
     args = parser.parse_args()
@@ -76,6 +77,7 @@ def main():
 
     display_text = " ".join(args.text)
     tts_text = args.tts_text if args.tts_text else display_text
+    subtitle_text = args.subtitle_text if args.subtitle_text else tts_text
 
     # -----------------------
     # Calculate video dimensions
@@ -113,7 +115,7 @@ def main():
     # -----------------------
     # Generate SRT subtitle
     # -----------------------
-    subtitle_path = generate_srt(display_text, args.duration)
+    subtitle_path = generate_srt(subtitle_text, args.duration)
 
     # -----------------------
     # Setup FFmpeg Inputs
