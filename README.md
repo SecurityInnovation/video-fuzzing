@@ -83,6 +83,38 @@ options:
                         Subtitle language code (default: eng)
 ```
 
+### text-to-image.py
+
+Produce images from text, intended to test OCR.
+
+```commandline
+usage: text-to-image.py [-h] [--fontsize FONTSIZE] [--fontfile FONTFILE] [--output-dir OUTPUT_DIR] [--list-file LIST_FILE] [--fontcolor FONTCOLOR] [--background BACKGROUND]
+                        [--maxwidth MAXWIDTH] [--maxheight MAXHEIGHT] [--margin MARGIN]
+                        ...
+
+Generate a series of images from text.
+
+positional arguments:
+  text                  Text to display across images
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --fontsize FONTSIZE   Font size in pixels (default: 32)
+  --fontfile FONTFILE   Path to a TTF/OTF font file
+  --output-dir OUTPUT_DIR
+                        Directory to save output images
+  --list-file LIST_FILE
+                        Write the list of image paths to this file
+  --fontcolor FONTCOLOR
+                        Font color (default: white)
+  --background BACKGROUND
+                        Background color (default: black)
+  --maxwidth MAXWIDTH   Maximum image width (default: 1280)
+  --maxheight MAXHEIGHT
+                        Maximum image height (default: 720)
+  --margin MARGIN       Margin in pixels (default: 10)
+```
+
 ### mp4_datetime_fuzzer.py
 
 Videos have timestamps in the frames. Let's fuzz those to see if something breaks :)
