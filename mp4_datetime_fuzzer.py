@@ -134,10 +134,14 @@ def main():
     parser.add_argument('--input', '-i', required=True, help='Input MP4 file')
     parser.add_argument('--output', '-o', default='fuzz_outputs', help='Directory for fuzzed files')
     parser.add_argument('--count', '-n', type=int, default=100, help='Number of output files to generate')
-    parser.add_argument('--atoms', nargs='+', default=['mvhd', 'tkhd', 'mdhd'], help='Atom types to fuzz')
+    parser.add_argument('--atoms',
+                    nargs='+',
+                    default=['mvhd', 'tkhd', 'mdhd', 'stts', 'elst', 'edts'],
+                    choices=['mvhd', 'tkhd', 'mdhd', 'stts', 'elst', 'edts'],
+                    help='Atom types to fuzz: movie header (mvhd), track header (tkhd), media header (mdhd), time-to-sample (stts), edit list (elst), edit box (edts)')
     parser.add_argument('--bit-depth', type=int, choices=[32, 64], default=32, help='Field size: 32 or 64-bit')
     parser.add_argument('--fields', choices=['creation', 'modification', 'both'], default='both', help='Fields to fuzz')
-    parser.add_argument('--fuzz-fields', type=int, default=0, help='Number of timestamp fields to fuzz per file')
+    parser.add_argument('--fuzz-fields', type=int, default=20, help='Number of timestamp fields to fuzz per file')
     parser.add_argument('--log', default='fuzz_mapping.csv', help='CSV file to log fuzzed changes')
     parser.add_argument('--min-value', type=int, default=0, help='Minimum value to use for fuzzing')
     parser.add_argument('--max-value', type=int, default=0xFFFFFFFFFFFFFFFF, help='Maximum value for fuzzing')

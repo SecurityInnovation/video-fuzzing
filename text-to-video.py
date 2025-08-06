@@ -55,7 +55,7 @@ def generate_srt(text, duration_seconds):
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Generate a video with text, optional TTS, and embedded subtitles."
+        description="Generate a video with text, optional Text-to-Speech, and optional embedded subtitles."
     )
     parser.add_argument("--fontsize", type=int, default=32, help="Font size in pixels (default: 32)")
     parser.add_argument("--duration", type=int, default=10, help="Duration of the video in seconds (default: 10)")
@@ -135,9 +135,9 @@ def main():
         audio_map = "[a]"
 
     if args.tts:
-        filter_complex = f"[0:v]drawtext=text='{escaped_text}':font='Courier New Bold':fontcolor={args.fontcolor}:fontsize={args.fontsize}:x={args.margin}:y={args.margin}:line_spacing={int(args.fontsize * 0.5)}[v]"
+        filter_complex = f"[{video_map}]drawtext=text='{escaped_text}':font='Courier New Bold':fontcolor={args.fontcolor}:fontsize={args.fontsize}:x={args.margin}:y={args.margin}:line_spacing={int(args.fontsize * 0.5)}[v]"
     else:
-        filter_complex = f"[0:v]drawtext=text='{escaped_text}':font='Courier New Bold':fontcolor={args.fontcolor}:fontsize={args.fontsize}:x={args.margin}:y={args.margin}:line_spacing={int(args.fontsize * 0.5)}[v];[1:a]volume={args.volume}dB[a]"
+        filter_complex = f"[{video_map}]drawtext=text='{escaped_text}':font='Courier New Bold':fontcolor={args.fontcolor}:fontsize={args.fontsize}:x={args.margin}:y={args.margin}:line_spacing={int(args.fontsize * 0.5)}[v];[1:a]volume={args.volume}dB[a]"
 
     # -----------------------
     # Build and Run FFmpeg Command

@@ -3,15 +3,17 @@
 ## Description
 Tools for creating media files to stress AV processing software.
 
-MP4 is the primary format here, although `ffmpeg` is used for the actual AV work and it supports a lot of formats. Feel
+MP4 is the primary format here, although `ffmpeg` is used for the actual AV work, and it supports a lot of formats. Feel
 free to add more formats.
 
 ## Installation
 
 You'll need [ffmpeg](https://ffmpeg.org). It's the most popular open-source, command line AV tool.
 
+For text-to-speech, `say` is used on macOS, [`espeak`](https://github.com/espeak-ng/espeak-ng/) is used on other platforms.
+
 ```shell
-brew install ffmpeg || apt-get install ffmpeg || yum install ffmpeg
+brew bundle || apt-get install ffmpeg espeak-ng || yum install ffmpeg espeak-ng
 ```
 
 ## Usage
