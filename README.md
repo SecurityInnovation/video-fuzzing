@@ -1,5 +1,7 @@
 # video-fuzzing
 
+<img src="docs/video-imp.png" alt="video fuzzing logo" width="150" style="float: left; margin-right:10px;" />
+
 Tools for creating media files to attack video processing software using AI.
 
 ## Description
@@ -101,6 +103,10 @@ optional arguments:
   --add-audio           Add mono 4kHz white noise audio track
 ```
 
+Examples:
+- [video-high-scene-rate1.mp4](docs/video-high-scene-rate1.mp4)
+- [video-high-scene-rate2.mp4](docs/video-high-scene-rate2.mp4)
+
 ### text-to-video.py
 
 Especially for LLMs, we want video with readable text in the video, audio and subtitles. We may want that text
@@ -135,6 +141,9 @@ optional arguments:
   --subtitle-language SUBTITLE_LANGUAGE
                         Subtitle language code (default: eng)
 ```
+
+Examples:
+- [text-to-video1.mp4](docs/text-to-video1.mp4)
 
 ### text-to-image.py
 
