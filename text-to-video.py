@@ -57,18 +57,18 @@ def main():
     parser = argparse.ArgumentParser(
         description="Generate a video with text, optional Text-to-Speech, and optional embedded subtitles."
     )
-    parser.add_argument("--fontsize", type=int, default=32, help="Font size in pixels (default: 32)")
+    parser.add_argument("--fontsize", type=int, default=32, help="Font size in pixels (default: 32 pixels)")
     parser.add_argument("--duration", type=int, default=10, help="Duration of the video in seconds (default: 10)")
     parser.add_argument("--output", default="output.mp4", help="Output filename (default: output.mp4)")
     parser.add_argument("--fontcolor", default="white", help="Font color (default: white)")
     parser.add_argument("--background", default="black", help="Background color (default: black)")
     parser.add_argument("--maxwidth", type=int, default=1280, help="Maximum video width in pixels (default: 1280)")
-    parser.add_argument("--volume", type=float, default=-30, help="White noise volume in dB (default: -30)")
+    parser.add_argument("--volume", type=float, default=-30, help="White noise volume in decibels (dB) (default: -30)")
     parser.add_argument("--margin", type=int, default=10, help="Margin around the text in pixels (default: 10)")
     parser.add_argument("--tts", action="store_true", help="Use TTS audio instead of white noise")
     parser.add_argument("--tts-text", help="Alternate text to use for TTS (default: same as visible text)")
     parser.add_argument("--subtitle-text", help="Alternate text to use for subtitles (default: same as TTS text, which defaults to visible text)")
-    parser.add_argument("--subtitle-language", default="eng", help="Subtitle language code (default: eng)")
+    parser.add_argument("--subtitle-language", default="eng", help="Subtitle language ISO 639-2 code (default: eng)")
     parser.add_argument("text", nargs=argparse.REMAINDER, help="Text to display and/or speak")
     args = parser.parse_args()
 
