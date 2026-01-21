@@ -14,11 +14,12 @@ def modify_file_randomly(path, byte_set, length, count, spacing):
             f.seek(pos)
             chunk = bytes(random.choice(byte_set) for _ in range(length))
             f.write(chunk)
+            print(f"Wrote {length} at position {pos}")
             if spacing > 0:
                 pos += spacing
 
 def main():
-    parser = argparse.ArgumentParser(description="Scatter random bytes into a binary file using random access.")
+    parser = argparse.ArgumentParser(description="Scatter random bytes into a binary file.")
     parser.add_argument("file", help="Path to the binary file to modify")
     parser.add_argument("--byte-set", nargs="+", default=["00", "ff"], help="Set of hex byte values to use (e.g., 00 ff aa)")
     parser.add_argument("--length", type=int, default=1, help="Length of each modification in bytes")

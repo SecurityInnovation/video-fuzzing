@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import argparse
+import os
 import platform
 import subprocess
 import shutil
@@ -45,8 +46,20 @@ def main():
     parser.add_argument("--image-list", type=Path, help="Path to text file with image filenames (one per line)")
     parser.add_argument("--shuffle-images", action="store_true", help="Shuffle the image list before use")
     parser.add_argument("--add-audio", action="store_true", help="Add mono 4kHz white noise audio track")
+    parser.add_argument("--verbose", action="store_true", help="Verbose output")
 
     args = parser.parse_args()
+
+    if args.width % 2 == 1:
+        print("WARNING: width is not an even number, this may fail")
+    if args.height % 2 == 1:
+        print("WARNING: height is not an even number, this may fail")
+
+    ffmpeg = "ffmpeg"
+    # homebrew has extra features we use in ffmpeg-full
+    ffmpeg_full = "/opt/homebrew/opt/ffmpeg-full/bin/ffmpeg"
+    if os.path.exists(ffmpeg_full):
+        ffmpeg = ffmpeg_full
 
     use_videotoolbox = (platform.system() == "Darwin")
 
@@ -90,35 +103,35 @@ def main():
 
         if use_noise:
             run([
-                "ffmpeg", "-y",
+                ffmpeg, "-y",
                 "-f", "lavfi", "-i", f"nullsrc=s={args.width}x{args.height}:d={duration}",
                 "-vf", f"noise=alls=100:allf=t+u,fps={args.frame_rate}",
                 "-preset", "veryfast",
                 str(output_file)
-            ], quiet=True)
+            ], quiet=not args.verbose)
         elif use_image:
             if args.shuffle_images:
                 image_path = image_files[random.randint(0, len(image_files)-1)]
             else:
                 image_path = image_files[i % len(image_files)]
             run([
-                "ffmpeg", "-y",
+                ffmpeg, "-y",
                 "-loop", "1", "-i", image_path,
                 "-t", str(duration),
                 "-vf", f"scale={args.width}:{args.height},fps={args.frame_rate}",
                 "-pix_fmt", "yuv420p",
                 "-preset", "veryfast",
                 str(output_file)
-            ], quiet=True)
-        else:
+            ], quiet=not args.verbose)
+        else:  # elif use_color:
             color = colors[i % len(colors)]
             run([
-                "ffmpeg", "-y",
+                ffmpeg, "-y",
                 "-f", "lavfi", "-i", f"color=c={color}:s={args.width}x{args.height}:d={duration}",
                 "-vf", f"fps={args.frame_rate}",
                 "-preset", "veryfast",
                 str(output_file)
-            ], quiet=True)
+            ], quiet=not args.verbose)
 
     concat_file = tmp_dir / "inputs.txt"
     with concat_file.open("w") as f:
@@ -134,12 +147,12 @@ def main():
     if args.add_audio:
         total_duration = scene_count * duration
         run([
-            "ffmpeg", "-y",
+            ffmpeg, "-y",
             "-f", "lavfi",
             "-i", f"anoisesrc=color=white:duration={total_duration}:sample_rate=44100",
             "-ac", "1",
             str(audio_file)
-        ])
+        ], quiet=not args.verbose)
 
     if use_videotoolbox:
         codec_map = {
@@ -159,7 +172,7 @@ def main():
             x265_extra_params = ["-x265-params", "level-idc=6.2"]
 
     ffmpeg_cmd = [
-        "ffmpeg", "-y",
+        ffmpeg, "-y",
         "-f", "concat", "-safe", "0", "-i", str(concat_file)
     ]
     input_index = 1
@@ -205,7 +218,7 @@ def main():
         ffmpeg_cmd += ["-c:a", "aac", "-ar", "11025", "-ac", "1"]
 
     ffmpeg_cmd.append(args.output)
-    run(ffmpeg_cmd)
+    run(ffmpeg_cmd, quiet=not args.verbose)
 
     shutil.rmtree(tmp_dir)
 

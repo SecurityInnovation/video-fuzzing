@@ -75,6 +75,12 @@ def main():
     if not args.text:
         parser.error("No text provided.")
 
+    ffmpeg = "ffmpeg"
+    # homebrew has extra features we use in ffmpeg-full
+    ffmpeg_full = "/opt/homebrew/opt/ffmpeg-full/bin/ffmpeg"
+    if os.path.exists(ffmpeg_full):
+        ffmpeg = ffmpeg_full
+
     display_text = " ".join(args.text)
     tts_text = args.tts_text if args.tts_text else display_text
     subtitle_text = args.subtitle_text if args.subtitle_text else tts_text
@@ -143,7 +149,7 @@ def main():
     # Build and Run FFmpeg Command
     # -----------------------
     command = f"""
-    ffmpeg -y {video_input} {audio_input} {subtitle_input} \
+    {ffmpeg} -y {video_input} {audio_input} {subtitle_input} \
     -filter_complex "{filter_complex}" \
     -map "[v]" -map {audio_map} -map 2:s:0 \
     -c:v libx264 -crf:v 20 -c:a aac -c:s mov_text \

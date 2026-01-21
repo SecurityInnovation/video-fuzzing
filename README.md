@@ -101,6 +101,7 @@ optional arguments:
                         Path to text file with image filenames (one per line)
   --shuffle-images      Shuffle the image list before use
   --add-audio           Add mono 4kHz white noise audio track
+  --verbose             Verbose output
 ```
 
 Examples:
@@ -213,7 +214,7 @@ optional arguments:
                         Value generation strategy
   --seed SEED           Random seed for reproducibility
   --dry-run             Do not write files, simulate only
-  --hash                Append SHA256 hash and log it
+  --hash                Append SHA256 hash of content to filename
 ```
 
 ### scatter_bytes.py
@@ -223,7 +224,7 @@ This script writes random bytes throughout a file. It isn't specifically for vid
 ```commandline
 usage: scatter_bytes.py [-h] [--byte-set BYTE_SET [BYTE_SET ...]] [--length LENGTH] [--count COUNT] [--spacing SPACING] file
 
-Scatter random bytes into a binary file using random access.
+Scatter random bytes into a binary file.
 
 positional arguments:
   file                  Path to the binary file to modify

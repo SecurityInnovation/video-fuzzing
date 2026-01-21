@@ -150,7 +150,7 @@ def main():
                         help='Value generation strategy')
     parser.add_argument('--seed', type=int, help='Random seed for reproducibility')
     parser.add_argument('--dry-run', action='store_true', help='Do not write files, simulate only')
-    parser.add_argument('--hash', action='store_true', help='Append SHA256 hash and log it')
+    parser.add_argument('--hash', action='store_true', help='Append SHA256 hash of content to filename')
 
     args = parser.parse_args()
     if args.seed is not None:
